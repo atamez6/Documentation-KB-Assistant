@@ -24,4 +24,5 @@ def log_error(message: str, color: str = Color.RED):
 def log_success(message: str, color: str = Color.GREEN):
     print(f"{color}[SUCCESS] {message}{Color.END}") 
 
-    
+def log_header(message: str, color: str = Color.PURPLE):
+    print(f"{color}{Color.BOLD}[HEADER] {message}{Color.END}")

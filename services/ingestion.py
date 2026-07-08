@@ -10,7 +10,7 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_ollama import OllamaEmbeddings
 
-from services.logger import log_info, log_warning, log_error, log_success
+from services.logger import log_header, log_info, log_warning, log_error, log_success
 
 load_dotenv()
 
@@ -37,13 +37,24 @@ vectorstore = Chroma(
 
 
 
+#load, split, embed, and store documents in the vectorstore
 
-
-
+#añadir, try, await, except, log_error, log_success, log_info, log_warning, log_header
+#debo suar tasks? await asyncio.gather? asyncio.create_task? asyncio.run? asyncio.sleep? asyncio.wait? asyncio.as_completed?
+#docs #processed, docs failed, docs skipped, docs embedded, docs stored, docs retrieved, docs deleted, 
+#create document to langchain
+#langgraph for memory save
 
 async def main():
     '''main async funct to orchestrate the ingestion process
     '''
+    log_header("Starting the ingestion process...", color="purple")
+    log_info("Loading documents from the 'data' directory...", color="blue")
+
+    
+
+
+    log_success("Ingestion process completed successfully!", color="green")
 
 
 if __name__ == "__main__":
