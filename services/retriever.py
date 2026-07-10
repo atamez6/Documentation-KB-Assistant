@@ -1,9 +1,9 @@
 import asyncio
 from typing import Any, Dict, List
 from langchain_core.documents import Document
-from logger import log_header, log_info, log_warning, log_error, log_success
-from get_vectorstore import vectorstore
-from settings import settings
+from services.logger import log_header, log_info, log_warning, log_error, log_success
+from services.get_vectorstore import vectorstore
+from config.settings import settings
 
 def serialize_documents(documents: List[Document]) -> List[Dict[str, Any]]:
         '''serialize documents to a list of dictionaries

@@ -2,6 +2,8 @@ from pydantic import BaseModel
 from typing import List
 from pydantic_settings import BaseSettings, SettingsConfigDict,YamlConfigSettingsSource, PydanticBaseSettingsSource
 import yaml
+from pathlib import Path
+
 
 class TextSplitterSettings(BaseModel):
     chunk_size: int 
@@ -34,7 +36,7 @@ class DocumentsSettings(BaseModel):
 
 
 
-class Settins(BaseSettings):
+class Settings(BaseSettings):
    llm : LLMSettings
    embedding : EmbeddingSettings
    retriever : RetrieverSettings 
@@ -42,5 +44,24 @@ class Settins(BaseSettings):
    text_splitter : TextSplitterSettings
    documents : DocumentsSettings
 
-   model_config = SettingsConfigDict(yaml_file="config.yaml")
+   model_config = SettingsConfigDict(yaml_file=Path(__file__).parent / "config.yaml")
 
+   
+   @classmethod
+   def settings_customise_sources(
+        cls,
+        settings_cls,
+        init_settings,
+        env_settings,
+        dotenv_settings,
+        file_secret_settings,
+        ):
+        return(
+            YamlConfigSettingsSource(settings_cls),
+              )
+
+
+
+
+
+settings = Settings()

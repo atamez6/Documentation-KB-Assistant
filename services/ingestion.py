@@ -1,5 +1,5 @@
 import asyncio
-from settings import settings
+from config.settings import settings
 import os
 import ssl
 from typing import Any, Dict, List
@@ -11,11 +11,11 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_core.documents import Document
 
-from loader import load_pdf,load_pdfs_from_directory
+from services.loader import load_pdf,load_pdfs_from_directory
 
 
-from logger import log_header, log_info, log_warning, log_error, log_success
-from get_vectorstore import vectorstore,embeddings
+from services.logger import log_header, log_info, log_warning, log_error, log_success
+from services.get_vectorstore import vectorstore,embeddings
 
 load_dotenv()
 
@@ -46,7 +46,7 @@ async def main():
     file_path=settings.documents.source_directory
     documents= await load_pdfs_from_directory(directory_path=file_path)
     chunks = text_splitter.split_documents(documents)
-    
+
     ids = [f"doc_{uuid.uuid4()}" for i in enumerate(chunks)]
 
     log_info("Loading documents from the 'data' directory...", color="blue")

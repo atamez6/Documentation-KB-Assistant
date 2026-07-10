@@ -1,5 +1,5 @@
 from langchain.chat_models import init_chat_model
-from settings import settings
+from config.settings import settings
 
 llm = init_chat_model(
     f"{settings.llm.provider}:{settings.llm.model}", 

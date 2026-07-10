@@ -1,10 +1,10 @@
 
 from langchain_community.document_loaders import PyPDFLoader
 import asyncio
-from settings import settings
+from config.settings import settings
 from langchain_core.documents import Document
 import os
-from logger import log_info,log_warning,log_error,log_success
+from services.logger import log_info,log_warning,log_error,log_success
 
 async def load_pdf(file_path:str)-> list[Document]:
     '''load a pdf file saved on DATA directory with pypdfloader and return the text content as a string'''
