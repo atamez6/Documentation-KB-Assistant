@@ -1,7 +1,7 @@
 
 from langchain_community.document_loaders import PyPDFLoader
 import asyncio
-
+from settings import settings
 from langchain_core.documents import Document
 import os
 from logger import log_info,log_warning,log_error,log_success
@@ -18,13 +18,14 @@ async def load_pdf(file_path:str)-> list[Document]:
     
 
 
+accepted_file_extensions = settings.documents.accepted_file_extensions
 
 async def load_pdfs_from_directory(directory_path: str):
 
     '''load all pdf files from a directory and return a list of Document objects'''
     results = []
     try:
-        tasks = [load_pdf(os.path.join(directory_path,f))for f in os.listdir(directory_path) if f.endswith('.pdf')]
+        tasks = [load_pdf(os.path.join(directory_path,f))for f in os.listdir(directory_path) if f.endswith(tuple(accepted_file_extensions))]
         all_docs = await asyncio.gather(*tasks)
         for doc in all_docs:
             if doc:

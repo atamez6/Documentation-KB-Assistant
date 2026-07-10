@@ -3,6 +3,7 @@ from typing import Any, Dict, List
 from langchain_core.documents import Document
 from logger import log_header, log_info, log_warning, log_error, log_success
 from get_vectorstore import vectorstore
+from settings import settings
 
 def serialize_documents(documents: List[Document]) -> List[Dict[str, Any]]:
         '''serialize documents to a list of dictionaries
@@ -17,8 +18,8 @@ def serialize_documents(documents: List[Document]) -> List[Dict[str, Any]]:
         return serialized_docs
     
 
-
-async def retrive_documents(query: str, k: int = 2) -> tuple[str, List[Dict]]:
+k = settings.retriever.top_k  # Number of documents to retrieve
+async def retrive_documents(query: str, k: int = k) -> tuple[str, List[Dict]]:
         
         '''retrive documents from the vectorstore based on a query
         '''

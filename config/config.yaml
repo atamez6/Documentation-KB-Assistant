@@ -1,0 +1,31 @@
+llm:
+  model: qwen3
+  temperature: 0.1
+  base_url: http://localhost:11434
+  provider: ollama
+
+
+embedding:
+  model_embeddings: nomic-embed-text 
+  base_url_embeddings: http://localhost:11434
+  provider: ollama
+
+
+
+chromadb:
+  chroma_collection_name: kb_assistant
+  chroma_persist_directory: ./chroma_db
+
+
+text_splitter:
+  chunk_size: 1000
+  chunk_overlap: 200
+
+
+retriever:
+  top_k: 3
+
+documents:
+  source_directory: ./data
+  accepted_file_extensions:
+    - .pdf

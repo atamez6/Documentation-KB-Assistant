@@ -1,5 +1,5 @@
 import asyncio
-
+from settings import settings
 import os
 import ssl
 from typing import Any, Dict, List
@@ -21,8 +21,8 @@ load_dotenv()
 
 
 text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=30,
-        chunk_overlap=5,
+        chunk_size=settings.text_splitter.chunk_size,
+        chunk_overlap=settings.text_splitter.chunk_overlap,
         length_function=len,
     )
 
@@ -42,9 +42,11 @@ async def main():
     '''main async funct to orchestrate the ingestion process
     '''
     log_header("Starting the ingestion process...", color="purple")
-    file_path="./data"
+    
+    file_path=settings.documents.source_directory
     documents= await load_pdfs_from_directory(directory_path=file_path)
     chunks = text_splitter.split_documents(documents)
+    
     ids = [f"doc_{uuid.uuid4()}" for i in enumerate(chunks)]
 
     log_info("Loading documents from the 'data' directory...", color="blue")

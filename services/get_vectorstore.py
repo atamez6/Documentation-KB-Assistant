@@ -1,15 +1,15 @@
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
+from settings import settings
 
 embeddings = OllamaEmbeddings(
-    model="nomic-embed-text", 
-    base_url="http://localhost:11434",
+    model=settings.embedding.model_embeddings, 
+    base_url=settings.embedding.base_url_embeddings,
     )
 
 
 vectorstore = Chroma(       
-    collection_name="kb_assistant",
+    collection_name=settings.chromadb.chroma_collection_name,
     embedding_function=embeddings,
-    persist_directory="./chroma_db",
-    #client_settings={"chroma_ssl_verify": ssl.create_default_context(cafile=certifi.where())},
+    persist_directory=settings.chromadb.chroma_persist_directory,
     )
