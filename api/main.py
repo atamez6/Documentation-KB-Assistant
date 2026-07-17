@@ -1,8 +1,9 @@
 #streamlit FE app
-
+import streamlit as st
+from streamlit_option_menu import option_menu
 def main():
-    import streamlit as st
-    from streamlit_option_menu import option_menu
+
+
 
     # Set page configuration
     st.set_page_config(page_title="My Streamlit App", page_icon=":guardsman:", layout="wide")
