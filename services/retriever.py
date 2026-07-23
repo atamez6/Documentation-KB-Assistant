@@ -19,12 +19,12 @@ def serialize_documents(documents: List[Document]) -> List[Dict[str, Any]]:
     
 
 k = settings.retriever.top_k  # Number of documents to retrieve
-async def retrive_documents(query: str, k: int = k) -> tuple[str, List[Dict]]:
+def retrive_documents(query: str, k: int = k) -> tuple[str, List[Dict]]:
         
         '''retrive documents from the vectorstore based on a query
         '''
         log_info(f"Retrieving documents for query: {query}", color="blue")
-        results = await vectorstore.asimilarity_search(query, k=k)
+        results = vectorstore.similarity_search(query, k=k)
         log_success(f"Retrieved {len(results)} documents for query: {query}", color="green")
         content = "\n\n".join(doc.page_content for doc in results)
         return content, serialize_documents(results)

@@ -1,7 +1,8 @@
+import asyncio
 from typing import Any,Dict,List
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from services.llm import llm
+from services.chain import ask
 import streamlit as st
 
 
@@ -53,16 +54,17 @@ if prompt:
     with st.chat_message("assistant"):
         try:
             with st.spinner("getting info and creating a response"):
-                result: dict[str,Any] = llm.invoke(prompt)
-                answers= str(result.content.strip() or "(not answer to show.)")
-                sources=[]
+                pre_answer, serialized_docs = ask({"question": prompt})
+                answers= str(pre_answer.strip() or "(not answer to show.)")
+                sources=serialized_docs
 
             st.markdown(answers)
             if sources:
                 with st.expander("Sources"):
                     for source in sources:
-                        st.markdown(f"-- {source} --")
-
+                        filename = source["metadata"].get("source", "unknown")
+                        preview = source["page_content"][:100]
+                        st.markdown(f"📄 **{filename}**: {preview}...")
             st.session_state.messages.append(
                 {"role":"assistant",
                 "content":answers,

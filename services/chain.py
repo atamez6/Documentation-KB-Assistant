@@ -27,33 +27,26 @@ prompt_template = ChatPromptTemplate.from_messages([
     ("human", "Context:\n{context}\n\nQuestion: {question}"),
 ])
 
-async def get_context(query:str):
-    '''get context from the vectorstore based on a query
-    '''
-    content, _ = await retrive_documents(query["question"])
-    return content
 
 
-async def get_serialized_docs(query:str):
-    '''get serialized documents from the vectorstore based on a query
-    '''
-    _, serialized_docs = await retrive_documents(query)
-    return serialized_docs
+
+retrieval_chain = (
+    prompt_template
+    | llm
+    | StrOutputParser()
+)
 
 
-retrieval_chain = (RunnablePassthrough.assign(context=get_context)
-                    |prompt_template
-                    |llm
-                    |StrOutputParser())
 
 
-async def ask(query: str):
+
+
+
+def ask(query: dict):
     '''retrieval chain that retrieves documents from the vectorstore and uses llm to answer the query
     '''
-    response = await retrieval_chain.ainvoke({"question": query})                                             
-    return response
+    content, serialized_docs = retrive_documents(query["question"])
+    response =  retrieval_chain.invoke({"question": query["question"], "context": content})
+    return response,serialized_docs
 
 
-
-
-print(asyncio.run(ask("what is the capital of Japan?")))
