@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List,Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict,YamlConfigSettingsSource, PydanticBaseSettingsSource
 import yaml
 from pathlib import Path
@@ -12,8 +12,10 @@ class TextSplitterSettings(BaseModel):
 class LLMSettings(BaseModel):
     model: str
     temperature: float
-    base_url: str
     provider: str
+    base_url: Optional[str] = None
+    api_key: Optional[str] = None
+
 
 
 class EmbeddingSettings(BaseModel):
@@ -32,7 +34,7 @@ class RetrieverSettings(BaseModel):
 
 class DocumentsSettings(BaseModel):
   source_directory: str
-  accepted_file_extensions: list[str]
+  
 
 
 
@@ -44,7 +46,7 @@ class Settings(BaseSettings):
    text_splitter : TextSplitterSettings
    documents : DocumentsSettings
 
-   model_config = SettingsConfigDict(yaml_file=Path(__file__).parent / "config.yaml")
+   model_config = SettingsConfigDict(yaml_file=Path(__file__).parent / "config.yaml", env_nested_delimiter="__")
 
    
    @classmethod
@@ -58,6 +60,7 @@ class Settings(BaseSettings):
         ):
         return(
             YamlConfigSettingsSource(settings_cls),
+            env_settings,
               )
 
 
