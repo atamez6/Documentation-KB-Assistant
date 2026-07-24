@@ -36,7 +36,7 @@ text_splitter = RecursiveCharacterTextSplitter(
 #create document to langchain
 #langgraph for memory save
 #asyng gather to upload many files in parallel, but not too many to avoid overloading the system
-
+from services.get_vectorstore import vectorstore
 
 async def main():
     '''main async funct to orchestrate the ingestion process
@@ -47,14 +47,17 @@ async def main():
     documents= await load_pdfs_from_directory(directory_path=file_path)
     chunks = text_splitter.split_documents(documents)
 
-    ids = [f"doc_{uuid.uuid4()}" for i in enumerate(chunks)]
+    ids = [f"{chunk.metadata['source']}_{chunk.metadata.get('page')}_{i}" for i, chunk in enumerate(chunks)]
 
     log_info("Loading documents from the 'data' directory...", color="blue")
     print(f"Loaded {len(documents)} documents from the 'data' directory.")
     log_info("Splitting documents into chunks...", color="blue")
     print(f"Split {len(documents)} documents into {len(chunks)} chunks.")
     log_info("Embedding and storing chunks in the vectorstore...", color="blue")
+    print(ids)
     await vectorstore.aadd_documents(chunks, ids=ids)
+
+    print(vectorstore._collection.count()) 
 
     log_success("Ingestion process completed successfully!", color="green")
     return {
@@ -62,7 +65,6 @@ async def main():
         "chunks_created": len(chunks),
         "chunks_stored": len(chunks),
     }
-    
     
 
 if __name__ == "__main__":
