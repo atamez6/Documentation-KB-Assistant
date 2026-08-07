@@ -21,6 +21,8 @@ SYSTEM_PROMPT = (
     "you should always answer as the retrieved data from the vectorstore is your first option, if you cannot find the answer in the context or history, respond with 'I don't know.'"
 )
 
+
+
 prompt_template = ChatPromptTemplate.from_messages([
     ("system", SYSTEM_PROMPT),
     MessagesPlaceholder(variable_name="history"),
