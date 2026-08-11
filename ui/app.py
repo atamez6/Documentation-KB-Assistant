@@ -5,8 +5,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from services.chain import ask
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
-
-
+from config.settings import settings
 
 
 
@@ -49,11 +48,13 @@ prompt = st.chat_input("Ask me anything about your uploaded Docs and I'll retrie
 
 if prompt:
     history = []
+    
     for msg in st.session_state.messages[1:]:
         if msg["role"] == "user":
             history.append(HumanMessage(content=msg["content"]))
         elif msg["role"] == "assistant":
             history.append(AIMessage(content=msg["content"]))
+    history = history[-settings.memory.max_history_messages:]  # Limit the history to the last N messages
     st.session_state.messages.append({"role":"user","content":prompt,"sources":[]})
 
     

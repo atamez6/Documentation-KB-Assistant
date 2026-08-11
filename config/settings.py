@@ -34,6 +34,9 @@ class RetrieverSettings(BaseModel):
 
 class DocumentsSettings(BaseModel):
   source_directory: str
+
+class MemorySettings(BaseModel):
+  max_history_messages: int
   
 
 
@@ -45,7 +48,7 @@ class Settings(BaseSettings):
    chromadb : ChromaDBSettings
    text_splitter : TextSplitterSettings
    documents : DocumentsSettings
-
+   memory : MemorySettings
    model_config = SettingsConfigDict(yaml_file=Path(__file__).parent / "config.yaml", env_nested_delimiter="__")
 
    
