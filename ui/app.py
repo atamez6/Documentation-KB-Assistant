@@ -66,21 +66,35 @@ if prompt:
             with st.spinner("getting info and creating a response"):
                 pre_answer, serialized_docs = ask({"question": prompt}, history=history)
                 answers= str(pre_answer.strip() or "(not answer to show.)")
-                sources=serialized_docs
+                has_valid_answer = not answers.startswith("NO_ANSWER:")
+                sources = serialized_docs
 
             st.markdown(answers)
-            if sources:
+            if sources and has_valid_answer:
+                known_sources = set()
                 with st.expander("Sources"):
                     for source in sources:
                         filename = source["metadata"].get("source", "unknown")
+                        if filename in known_sources:
+                            continue
+                        known_sources.add(filename)
                         preview = source["page_content"][:100]
                         st.markdown(f"📄 **{filename}**: {preview}...")
+
+                        with open(filename, "rb") as f:
+                            st.download_button(
+                                label="Download Source",
+                                data=f,
+                                file_name=os.path.basename(filename),
+                                
+                            )
             st.session_state.messages.append(
                 {"role":"assistant",
                 "content":answers,
-                "sources": sources}
+                "sources": sources if has_valid_answer else []}
             )            
 
         except Exception as e:
             st.error("Failed creating a response")
             st.exception(e)    
+
